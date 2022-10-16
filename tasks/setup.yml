@@ -1,11 +1,7 @@
 ---
-- name: Create config directory
-  ansible.builtin.file:
-    path: /opt/app-heimdall/config
-    state: directory
-    owner: "{{app_heimdall_puid}}"
-    group: "{{app_heimdall_pgid}}"
-    mode: 0755
+- name: Create heimdall config volume
+  community.docker.docker_volume:
+    name: app_heimdall_config
 
 - name: Ensure linuxserver/heimdall image is pulled
   community.docker.docker_image:
@@ -26,17 +22,19 @@
   register: result
 
 - name: Create heimdall container
-  ansible.builtin.shell: |
-    docker run -d \
-    --name=heimdall \
-    -e PUID={{app_heimdall_puid}} \
-    -e PGID={{app_heimdall_pgid}} \
-    -e TZ={{app_heimdall_tz}} \
-    -v /opt/app-heimdall/config:/config:Z \
-    --network=app-network \
-    --restart unless-stopped \
-    lscr.io/linuxserver/heimdall
-  when: 
+  community.docker.docker_container:
+    env:
+     TZ: "{{app_heimdall_tz}}"
+    image: lscr.io/linuxserver/heimdall
+    mounts:
+     - source: app_heimdall_config
+       target: /config
+    name: heimdall
+    networks:
+     - name: app-network
+    restart_policy: unless-stopped
+    state: started
+  when:
     pulled.changed
     or
     result.exists == false
