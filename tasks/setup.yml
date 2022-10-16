@@ -1,7 +1,7 @@
 ---
 - name: Create heimdall config volume
   community.docker.docker_volume:
-    name: app_heimdall_config
+    name: heimdall_config
 
 - name: Ensure linuxserver/heimdall image is pulled
   community.docker.docker_image:
@@ -27,7 +27,7 @@
      TZ: "{{app_heimdall_tz}}"
     image: lscr.io/linuxserver/heimdall
     mounts:
-     - source: app_heimdall_config
+     - source: heimdall_config
        target: /config
     name: heimdall
     networks:
