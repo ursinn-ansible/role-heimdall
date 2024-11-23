@@ -40,7 +40,7 @@
   community.docker.docker_network:
     name: '{{ docker_network }}'
     driver_options:
-          com.docker.network.bridge.name: 'br-{{ docker_network }}'
+      com.docker.network.bridge.name: 'br-{{ docker_network }}'
 
 - name: Create heimdall container
   community.docker.docker_container:
