@@ -1,3 +1,8 @@
 ---
-app_heimdall_enabled: false
-app_heimdall_tz: "Europe/Zurich"
+role_heimdall_image: 'lscr.io/linuxserver/heimdall'
+role_heimdall_container: 'heimdall'
+role_heimdall_puid: '1000'
+role_heimdall_pgid: '1000'
+role_heimdall_tz: 'Europe/Zurich'
+role_heimdall_dir: '/opt/app-heimdall'
+role_heimdall_network: 'app-network'
